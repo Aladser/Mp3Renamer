@@ -1,9 +1,14 @@
-package mp3.renamer;
+package mp3renamer;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import static javax.swing.JFileChooser.FILES_AND_DIRECTORIES;
@@ -17,7 +22,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         getContentPane().setBackground(new Color(230,230,230));
-        setIconImage( new ImageIcon( getClass().getResource("logo.png") ).getImage() );
+        setIconImage( new ImageIcon( getClass().getResource("\\rsc\\logo.png") ).getImage() );
         // Центрирование поля
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();       
         int xCenter = (screenSize.width - this.getWidth())/2;
@@ -105,11 +110,15 @@ public class MainFrame extends javax.swing.JFrame {
     private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
         int fileChoiceResp = filechooser.showDialog(this, "Открыть файл");
         if (fileChoiceResp == JFileChooser.APPROVE_OPTION) {
-            openFiles(filechooser.getSelectedFile());
+            try {
+                openFiles(filechooser.getSelectedFile());
+            } catch (IOException | UnsupportedTagException | InvalidDataException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_openButtonActionPerformed
     // Открыть файлы
-    private void openFiles(File file){
+    private void openFiles(File file) throws IOException, UnsupportedTagException, InvalidDataException{
         if(file.isFile()){
             outTextArea.append("Открыт файл " + file.getAbsolutePath() + "\n");
             mp3Files = new Mp3Object[1];
@@ -117,6 +126,7 @@ public class MainFrame extends javax.swing.JFrame {
             outTextArea.append("Переименован в " + mp3Files[0].getFile().getAbsolutePath() + "\n\n");
         }
         else{
+            outTextArea.setText("");
             outTextArea.append("Открыта папка " + file.getAbsolutePath() + "\n");
             int size = file.listFiles().length;
             mp3Files = new Mp3Object[size]; 

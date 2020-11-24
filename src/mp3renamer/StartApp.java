@@ -1,4 +1,4 @@
-package mp3.renamer;
+package mp3renamer;
 
 // Точка старта
 public class StartApp {
