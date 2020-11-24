@@ -23,7 +23,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         getContentPane().setBackground(new Color(230,230,230));
-        setIconImage( new ImageIcon( getClass().getResource("\\rsc\\logo.png") ).getImage() );
+        setIconImage( new ImageIcon( getClass().getResource("logo.png") ).getImage() );
         // Центрирование поля
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();       
         int xCenter = (screenSize.width - this.getWidth())/2;

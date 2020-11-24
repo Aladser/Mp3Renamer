@@ -84,7 +84,6 @@ public class Mp3Object {
         }
         boolean res = false;
         if(!file.getAbsolutePath().equals(newFileName)){
-            System.out.println(isEdited);
             isEdited = true;
             File result = new File(newFileName);
             if(!newFileName.equals(fileName)) res = file.renameTo(result);
