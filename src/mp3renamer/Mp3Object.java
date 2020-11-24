@@ -14,6 +14,7 @@ public class Mp3Object {
     private File file;
     private Mp3File mp3file;  
     private boolean isAlbum;   // флаг альбома
+    private boolean isEdited = false;  // флаг измененного имени
     
     public Mp3Object(File _file, boolean _isAlbum) throws IOException, UnsupportedTagException, InvalidDataException{
         // Проверка формата
@@ -36,7 +37,11 @@ public class Mp3Object {
     
     public void setAlbum(){
         isAlbum = true;
-    }   
+    }
+    
+    public boolean isEdited(){
+        return isEdited;
+    }
     
     // Корректирует имена файлов
     private boolean correctFileName(){
@@ -78,7 +83,9 @@ public class Mp3Object {
             }
         }
         boolean res = false;
-        if(!file.getName().equals(newFileName)){
+        if(!file.getAbsolutePath().equals(newFileName)){
+            System.out.println(isEdited);
+            isEdited = true;
             File result = new File(newFileName);
             if(!newFileName.equals(fileName)) res = file.renameTo(result);
             file = result;

@@ -18,6 +18,7 @@ public class MainFrame extends javax.swing.JFrame {
  
     Mp3Object[] mp3Files;
     JFileChooser filechooser;
+    boolean openFileInExp = false;
        
     public MainFrame() {
         initComponents();
@@ -120,13 +121,18 @@ public class MainFrame extends javax.swing.JFrame {
     // Открыть файлы
     private void openFiles(File file) throws IOException, UnsupportedTagException, InvalidDataException{
         if(file.isFile()){
+            if(!openFileInExp) outTextArea.setText("");
+            openFileInExp = true;
             outTextArea.append("Открыт файл " + file.getAbsolutePath() + "\n");
             mp3Files = new Mp3Object[1];
             mp3Files[0] = new Mp3Object(file, albumFlag.isSelected());
-            outTextArea.append("Переименован в " + mp3Files[0].getFile().getAbsolutePath() + "\n\n");
+            if(mp3Files[0].isEdited()){
+                outTextArea.append("Переименован в " + mp3Files[0].getFile().getAbsolutePath() + "\n\n");
+            }
         }
         else{
             outTextArea.setText("");
+            openFileInExp = false;
             outTextArea.append("Открыта папка " + file.getAbsolutePath() + "\n");
             int size = file.listFiles().length;
             mp3Files = new Mp3Object[size]; 
