@@ -60,14 +60,18 @@ public class Mp3Object {
         String newFileName = fileName.substring(0);
         String name = file.getName();
         
-        String songName = mp3file.getId3v2Tag().getTitle();
-        String artist = mp3file.getId3v2Tag().getArtist();
-        String number = mp3file.getId3v2Tag().getTrack();
-        int num = Integer.parseInt(number);
-        if(num<10) number = "0" + num;
-        if(songName==null) songName="";
-        if(artist==null) artist="";
-        if(number==null) number="";
+        String songName = "";
+        String artist = "";
+        String number = "";          
+        if(mp3file.getId3v2Tag() != null)
+        {
+            songName = mp3file.getId3v2Tag().getTitle(); 
+            artist = mp3file.getId3v2Tag().getArtist();
+            number = mp3file.getId3v2Tag().getTrack();
+            if(songName==null) songName="";
+            if(artist==null) artist="";
+            if(number==null) number="";
+        }
 
         // Формирование название из тегов, если есть оба
         if(!songName.equals("") && !artist.equals("")){
