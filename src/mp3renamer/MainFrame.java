@@ -146,14 +146,17 @@ public class MainFrame extends javax.swing.JFrame {
             }
             // несколько файлов
             else{
+                // открытие списка файлов
                 mp3Files = new Mp3Object[size];
                 for(File elem : file.listFiles()){
                     if(getExtension(elem).equals(".mp3")){
                         outTextArea.append(elem.getName() + "\n");
                     }
                 }
+                // переименование
                 File elem;
                 String oldFileName;
+                outTextArea.append("Переименованы:\n");
                 for(int i=0; i<size; i++){
                     elem = file.listFiles()[i];
                     oldFileName = elem.getName();
@@ -165,10 +168,6 @@ public class MainFrame extends javax.swing.JFrame {
                             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         if(!mp3Files[i].getFile().getName().equals(oldFileName)){
-                            if(!isCalculations){
-                                isCalculations = true;
-                                outTextArea.append("Переименованы:\n");
-                            }
                             outTextArea.append(mp3Files[i].getFile().getName() + "\n");
                         }
                     } 
