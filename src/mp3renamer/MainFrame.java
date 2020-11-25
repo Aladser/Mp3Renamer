@@ -113,10 +113,26 @@ public class MainFrame extends javax.swing.JFrame {
     /** Поток переименований */
     private Thread Renaming(File file){
         return new Thread(()->{
-            if(file.isFile()){
-                if(!openFileInExp) outTextArea.setText("");
-                openFileInExp = true;
-                outTextArea.append("Открыт файл " + file.getAbsolutePath() + "\n");
+            if(!openFileInExp) outTextArea.setText("");
+            openFileInExp = file.isFile();
+            // Первая строка
+            String text = file.isFile() ? "Открыт файл " : "Открыта папка ";
+            text += file.getAbsolutePath();
+            int size = file.listFiles()==null ? 1 : file.listFiles().length;
+            String fileSym;
+            if(size==1 || size%10==1 && size!=11){
+                fileSym = "файл";
+            }
+            else if( (size==2||size==3||size==4) || (size%10==2||size%10==3||size%10==4) && (size!=12||size!=13||size!=14)){
+                fileSym = "файла";
+            }
+            else
+                fileSym = "файлов";
+            text += "  (" + size + " " + fileSym + ")\n";
+            outTextArea.setText(text);
+            // Список файлов
+            // 1 файл
+            if(openFileInExp){
                 mp3Files = new Mp3Object[1];
                 try {
                     mp3Files[0] = new Mp3Object(file, albumFlag.isSelected());
@@ -127,26 +143,22 @@ public class MainFrame extends javax.swing.JFrame {
                     outTextArea.append("Переименован в " + mp3Files[0].getFile().getAbsolutePath() + "\n\n");
                 }
             }
+            // несколько файлов
             else{
-                outTextArea.setText("");
-                openFileInExp = false;
-                outTextArea.append("Открыта папка \"" + file.getAbsolutePath() + "\". ");
-                int size = file.listFiles().length;
-                outTextArea.append(size + " файлов\n");
                 mp3Files = new Mp3Object[size];
-                for(File el : file.listFiles()){
-                    if(this.getExtension(el).equals(".mp3")){
-                        outTextArea.append(el.getName() + "\n");
+                for(File elem : file.listFiles()){
+                    if(getExtension(elem).equals(".mp3")){
+                        outTextArea.append(elem.getName() + "\n");
                     }
                 }
-                File el;
+                File elem;
                 String oldFileName;
                 for(int i=0; i<size; i++){
-                    el = file.listFiles()[i];
-                    oldFileName = el.getName();
-                    if(getExtension(el).equals(".mp3")){
+                    elem = file.listFiles()[i];
+                    oldFileName = elem.getName();
+                    if(getExtension(elem).equals(".mp3")){
                         try {
-                            mp3Files[i] = new Mp3Object(el, albumFlag.isSelected());
+                            mp3Files[i] = new Mp3Object(elem, albumFlag.isSelected());
                         } catch (IOException | UnsupportedTagException | InvalidDataException ex) {
                             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                         }
