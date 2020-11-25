@@ -136,6 +136,7 @@ public class MainFrame extends javax.swing.JFrame {
                 mp3Files = new Mp3Object[1];
                 try {
                     mp3Files[0] = new Mp3Object(file, albumFlag.isSelected());
+                    if(mp3Files[0].isError()) outTextArea.append("Ошибка переименования: файл занят другим процессом\n");
                 } catch (IOException | UnsupportedTagException | InvalidDataException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -159,6 +160,7 @@ public class MainFrame extends javax.swing.JFrame {
                     if(getExtension(elem).equals(".mp3")){
                         try {
                             mp3Files[i] = new Mp3Object(elem, albumFlag.isSelected());
+                            if(mp3Files[i].isError()) outTextArea.append("Ошибка переименования: файл занят другим процессом\n");
                         } catch (IOException | UnsupportedTagException | InvalidDataException ex) {
                             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                         }

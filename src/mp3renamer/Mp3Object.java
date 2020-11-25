@@ -13,8 +13,9 @@ import java.io.IOException;
 public class Mp3Object {
     private File file;
     private Mp3File mp3file;  
-    private boolean isAlbum;   // флаг альбома
+    private boolean isAlbum;            // флаг альбома
     private boolean isEdited = false;  // флаг измененного имени
+    private boolean isErr = false;
     
     public Mp3Object(File _file, boolean _isAlbum) throws IOException, UnsupportedTagException, InvalidDataException{
         // Проверка формата
@@ -28,7 +29,7 @@ public class Mp3Object {
         file = _file;
         isAlbum = _isAlbum;
         mp3file = new Mp3File(file.getAbsolutePath());
-        correctFileName();
+        isEdited = correctFileName();
     }
     
     public File getFile(){
@@ -41,6 +42,16 @@ public class Mp3Object {
     
     public boolean isEdited(){
         return isEdited;
+    }
+    
+    // показ ошибки переименования
+    public boolean isError(){
+        if(isErr){
+            isErr = false;
+            return true;
+        }
+        else
+            return false;
     }
     
     // Корректирует имена файлов
@@ -84,9 +95,9 @@ public class Mp3Object {
         }
         boolean res = false;
         if(!file.getAbsolutePath().equals(newFileName)){
-            isEdited = true;
             File result = new File(newFileName);
             if(!newFileName.equals(fileName)) res = file.renameTo(result);
+            isErr = !res;
             file = result;
         }
         return res;
