@@ -78,6 +78,7 @@ public class Mp3Object {
             // Если песня из альбома
             if(isAlbum){
                 newFileName = fileName.substring(0, fileName.length()-name.length());
+                if(Integer.parseInt(number) < 10) number = "0" + number;
                 newFileName += number + ". " + artist + " - " + songName + ".mp3";
             }
             else{

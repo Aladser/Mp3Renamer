@@ -113,66 +113,54 @@ public class MainFrame extends javax.swing.JFrame {
     /** Поток переименований */
     private Thread Renaming(File file){
         return new Thread(()->{
-            if(!openFileInExp) outTextArea.setText("");
-            openFileInExp = file.isFile();
+            File[] songFiles;
+            if(file.isDirectory()){
+                songFiles = file.listFiles();
+                outTextArea.setText("");
+            }
+            else{
+                songFiles = new File[1];
+                songFiles[0] = file;
+            }
+            int size = songFiles.length;
             // Первая строка
             String text = file.isFile() ? "Открыт файл " : "Открыта папка ";
             text += file.getAbsolutePath();
-            int size = file.listFiles()==null ? 1 : file.listFiles().length;
             String fileSym;
-            if(size==1 || size%10==1 && size!=11){
+            if(size==1 || size%10==1 && size!=11)
                 fileSym = "файл";
-            }
-            else if( (size==2||size==3||size==4) || (size%10==2||size%10==3||size%10==4) && (size!=12||size!=13||size!=14)){
+            else if( (size==2||size==3||size==4) || (size%10==2||size%10==3||size%10==4) && (size!=12||size!=13||size!=14))
                 fileSym = "файла";
-            }
             else
                 fileSym = "файлов";
             text += "  (" + size + " " + fileSym + ")\n";
             outTextArea.setText(text);
-            // Список файлов
-            // 1 файл
-            if(openFileInExp){
-                mp3Files = new Mp3Object[1];
-                try {
-                    mp3Files[0] = new Mp3Object(file, albumFlag.isSelected());
-                    if(mp3Files[0].isError()) outTextArea.append("Ошибка переименования: файл занят другим процессом\n");
-                } catch (IOException | UnsupportedTagException | InvalidDataException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                if(mp3Files[0].isEdited()){
-                    outTextArea.append("Переименован в " + mp3Files[0].getFile().getAbsolutePath() + "\n\n");
+            // открытие списка файлов
+            mp3Files = new Mp3Object[size];
+            for(File elem : songFiles){
+                if(getExtension(elem).equals(".mp3")){
+                    outTextArea.append(elem.getName() + "\n");
                 }
             }
-            // несколько файлов
-            else{
-                // открытие списка файлов
-                mp3Files = new Mp3Object[size];
-                for(File elem : file.listFiles()){
-                    if(getExtension(elem).equals(".mp3")){
-                        outTextArea.append(elem.getName() + "\n");
+            // переименование
+            File elem;
+            String oldFileName;
+            outTextArea.append("Переименованы:\n");
+            for(int i=0; i<size; i++){
+                elem = songFiles[i];
+                oldFileName = elem.getName();
+                if(getExtension(elem).equals(".mp3")){
+                    try {
+                        mp3Files[i] = new Mp3Object(elem, albumFlag.isSelected());
+                        if(mp3Files[i].isError()) outTextArea.append("Ошибка переименования: файл занят другим процессом\n");
+                    } catch (IOException | UnsupportedTagException | InvalidDataException ex) {
+                        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                // переименование
-                File elem;
-                String oldFileName;
-                outTextArea.append("Переименованы:\n");
-                for(int i=0; i<size; i++){
-                    elem = file.listFiles()[i];
-                    oldFileName = elem.getName();
-                    if(getExtension(elem).equals(".mp3")){
-                        try {
-                            mp3Files[i] = new Mp3Object(elem, albumFlag.isSelected());
-                            if(mp3Files[i].isError()) outTextArea.append("Ошибка переименования: файл занят другим процессом\n");
-                        } catch (IOException | UnsupportedTagException | InvalidDataException ex) {
-                            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        if(!mp3Files[i].getFile().getName().equals(oldFileName)){
-                            outTextArea.append(mp3Files[i].getFile().getName() + "\n");
-                        }
-                    } 
-                }
-            }           
+                    if(!mp3Files[i].getFile().getName().equals(oldFileName)){
+                        outTextArea.append(mp3Files[i].getFile().getName() + "\n");
+                    }
+                } 
+            }          
         });
     }
     // Слушатель кнопки "Открыть"
