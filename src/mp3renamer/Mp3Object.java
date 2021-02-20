@@ -5,6 +5,7 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  *
@@ -68,6 +69,17 @@ public class Mp3Object {
             songName = mp3file.getId3v2Tag().getTitle(); 
             artist = mp3file.getId3v2Tag().getArtist();
             number = mp3file.getId3v2Tag().getTrack();
+            // Проверка тега "Номер трека"
+            if(number.contains("/")){
+                String _number = "";
+                int i=0;
+                while(number.toCharArray()[i] != '/'){
+                    _number += number.toCharArray()[i];
+                    i++;
+                }
+                number = _number;
+            }
+            
             if(songName==null) songName="";
             if(artist==null) artist="";
             if(number==null) number="";
