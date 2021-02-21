@@ -69,6 +69,11 @@ public class Mp3Object {
             songName = mp3file.getId3v2Tag().getTitle(); 
             artist = mp3file.getId3v2Tag().getArtist();
             number = mp3file.getId3v2Tag().getTrack();
+            
+            if(songName==null) songName="";
+            if(artist==null) artist="";
+            if(number==null) number="";
+            
             // Проверка тега "Номер трека"
             if(number.contains("/")){
                 String _number = "";
@@ -79,10 +84,6 @@ public class Mp3Object {
                 }
                 number = _number;
             }
-            
-            if(songName==null) songName="";
-            if(artist==null) artist="";
-            if(number==null) number="";
         }
 
         // Формирование название из тегов, если есть оба
