@@ -145,7 +145,7 @@ public class MainFrame extends javax.swing.JFrame {
             // переименование
             File elem;
             String oldFileName;
-            outTextArea.append("Переименованы:\n");
+            int isRenamed = 0; // флаг переименования файла
             for(int i=0; i<size; i++){
                 elem = songFiles[i];
                 oldFileName = elem.getName();
@@ -157,6 +157,8 @@ public class MainFrame extends javax.swing.JFrame {
                         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     if(!mp3Files[i].getFile().getName().equals(oldFileName)){
+                        isRenamed++;
+                        if(isRenamed == 1) outTextArea.append("Переименованы:\n");
                         outTextArea.append(mp3Files[i].getFile().getName() + "\n");
                     }
                 } 

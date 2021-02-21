@@ -5,7 +5,6 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  *
@@ -76,6 +75,7 @@ public class Mp3Object {
             
             // Проверка тега "Номер трека"
             if(number.contains("/")){
+                
                 String _number = "";
                 int i=0;
                 while(number.toCharArray()[i] != '/'){
@@ -84,6 +84,10 @@ public class Mp3Object {
                 }
                 number = _number;
             }
+            
+            System.out.print("Номер = " + number + "; ");
+            System.out.print("Исполнитель = " + artist + "; ");
+            System.out.println("Название = " + songName);
         }
 
         // Формирование название из тегов, если есть оба
@@ -91,7 +95,7 @@ public class Mp3Object {
             // Если песня из альбома
             if(isAlbum){
                 newFileName = fileName.substring(0, fileName.length()-name.length());
-                if(Integer.parseInt(number) < 10) number = "0" + number;
+                if(number.length()==1) number = "0" + number;
                 newFileName += number + ". " + artist + " - " + songName + ".mp3";
             }
             else{
@@ -120,6 +124,7 @@ public class Mp3Object {
             isErr = !res;
             file = result;
         }
+        System.out.println(file.getPath());
         return res;
     }
 }
