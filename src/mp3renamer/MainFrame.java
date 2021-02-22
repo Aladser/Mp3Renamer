@@ -129,7 +129,7 @@ public class MainFrame extends javax.swing.JFrame {
             String fileSym;
             if(size==1 || size%10==1 && size!=11)
                 fileSym = "файл";
-            else if( (size==2||size==3||size==4) || (size%10==2||size%10==3||size%10==4) && (size!=12||size!=13||size!=14))
+            else if( (size==2|size==3|size==4) || ((size%10==2|size%10==3|size%10==4) && (size!=12&size!=13&size!=14)))
                 fileSym = "файла";
             else
                 fileSym = "файлов";
